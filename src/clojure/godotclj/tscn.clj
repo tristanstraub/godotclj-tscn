@@ -3,9 +3,11 @@
             [camel-snake-kebab.core :as csk]
             [clojure.string :as str]))
 
-(def parser
-  (instaparse/parser
-   "file       = descriptor (<ws*> descriptor <ws*>)*;
+(defn parser
+  [s & args]
+  (let [p (apply instaparse/parser
+                 "
+    file       = <ws*> attributes? <ws*> descriptor (<ws*> descriptor <ws*>)*;
     descriptor = header (<ws*> kv)*;
     header     = <'['> <ws*> identifier (<ws+> attributes)? <ws*> <']'>;
     attributes = kv (<ws+> kv)*;
@@ -13,22 +15,28 @@
     identifier = #'[0-9a-zA-Z_/]+';
     value      = integer | number | object | string | dictionary | boolean | array;
     boolean    = 'true' | 'false';
-    object     = identifier <'('> <ws*> arguments? <ws*> <')'>
+    object     = identifier <'('> <ws*> arguments? <ws*> <')'>;
     integer    = #'[+-]'? #'[0-9]+';
     number     = #'[+-]'? #'[0-9]+' '.' #'[0-9]+';
     string     = <'\"'> #'[^\"]*' <'\"'>;
-    arguments  = value (<ws*> <','> <ws*> value)* (<ws*> <','>)?
-    dictionary = <'{'> (<ws*> dictionarykv <ws*> (<','> <ws*> dictionarykv)*) <ws*> <'}'>
-    array      = <'['> <ws*> arguments? <ws*> <']'>
+    arguments  = value (<ws*> <','> <ws*> value)* (<ws*> <','>)?;
+    dictionary = <'{'> keyvalues <ws*> <'}'>;
+    keyvalues  = (<ws*> dictionarykv <ws*> (<','> <ws*> dictionarykv)*)?;
+    array      = <'['> <ws*> arguments? <ws*> <']'>;
     dictionarykv = string <ws*> <':'> <ws*> value;
-    ws         = #'[ \t\n]+';
-"))
+    ws         = #'[ \t\n]+' | ';' #'[^\n]*[\n]?';
+"
+                 args)]
+    (p s)))
 
 (defn ->keyword-maybe
   [k]
   (if (str/starts-with? k "_")
     k
     (csk/->kebab-case-keyword k :separator \_)))
+
+
+
 
 (def transforms
   {:file         (fn [& parts] (vec parts))
@@ -39,14 +47,22 @@
                    (if (seq values)
                      (assoc resource :values (into {} values))
                      resource))
-   :header       (fn [resource attributes]
-                   {:resource   resource
-                    :attributes attributes})
+   :header       (fn
+                   ([resource]
+                    {:resource   resource})
+                   ([resource attributes]
+                    {:resource   resource
+                     :attributes attributes}))
    :identifier   (fn [vs] vs)
    :value        (fn [vs] vs)
    :attributes   (fn [& kv] (into {} kv))
-   :dictionary   (fn [& kv] (into {} kv))
-   :array        (fn [values] values)
+   :dictionary   (fn
+                   ([] nil)
+                   ([kv] (into {} kv)))
+   :keyvalues    (fn [& kv] kv)
+   :array        (fn
+                   ([] [])
+                   ([values] values))
    :dictionarykv (fn [k v]
                    [(->keyword-maybe k) v])
 
@@ -68,6 +84,14 @@
 (comment
   (instaparse/transform transforms (parser "[gd_scene load_steps=3 format=2]"))
 
+  (instaparse/transform transforms (parser "[gd_scene load_steps=3 format=2]" :start :header))
+
   (instaparse/transform transforms (parser (slurp "../thecreeps-godot-clj/src/godot/HUD.tscn")))
+
+  (instaparse/transform transforms (parser (slurp "../thecreeps-godot-clj/project.godot")))
+
+  (instaparse/transform transforms (parser "{\n}" :start :dictionary))
+
+  (instaparse/transform transforms (parser "config_version=4" :start :attributes))
 
   )
