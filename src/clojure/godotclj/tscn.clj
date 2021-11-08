@@ -78,20 +78,20 @@
                    (vec args))})
 
 (defn parse
-  [s]
-  (instaparse/transform transforms (parser s)))
+  [s & args]
+  (instaparse/transform transforms (apply parser s args)))
 
 (comment
   (instaparse/transform transforms (parser "[gd_scene load_steps=3 format=2]"))
 
-  (instaparse/transform transforms (parser "[gd_scene load_steps=3 format=2]" :start :header))
+  (parse "[gd_scene load_steps=3 format=2]" :start :header)
 
-  (instaparse/transform transforms (parser (slurp "../thecreeps-godot-clj/src/godot/HUD.tscn")))
+  (parse (slurp "../thecreeps-godot-clj/src/godot/HUD.tscn"))
 
-  (instaparse/transform transforms (parser (slurp "../thecreeps-godot-clj/project.godot")))
+  (parse (slurp "../thecreeps-godot-clj/project.godot"))
 
-  (instaparse/transform transforms (parser "{\n}" :start :dictionary))
+  (parse "{\n}" :start :dictionary)
 
-  (instaparse/transform transforms (parser "config_version=4" :start :attributes))
+  (parse "config_version=4" :start :attributes)
 
   )
