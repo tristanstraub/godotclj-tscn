@@ -6,6 +6,8 @@ Usage:
 (require '[godotclj.tscn :refer [parse]])
 #+END_SRC
 
+* Scene file parsing
+
 #+BEGIN_SRC clojure :results output
 (prn (parse (slurp "test-resources/main.tscn")))
 #+END_SRC
@@ -140,6 +142,8 @@ Usage:
                :to ".",
                :method "new_game"}}]
 #+END_SRC
+
+* Project file parsing
 
 #+BEGIN_SRC clojure :results output
 (prn (parse (slurp "test-resources/project.godot")))
