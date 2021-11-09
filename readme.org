@@ -41,36 +41,7 @@ Usage:
  {:resource "sub_resource",
   :attributes {:type "Curve2D", :id 1},
   :values {"_data" {:points {:name "PoolVector2Array",
-                             :arguments [0
-                                         0
-                                         0
-                                         0
-                                         0
-                                         0
-                                         0
-                                         0
-                                         0
-                                         0
-                                         1024
-                                         0
-                                         0
-                                         0
-                                         0
-                                         0
-                                         1024
-                                         600
-                                         0
-                                         0
-                                         0
-                                         0
-                                         0
-                                         600
-                                         0
-                                         0
-                                         0
-                                         0
-                                         0
-                                         0]}}}}
+                             :arguments [0 0 0 0 0 0 0 0 0 0 1024 0 0 0 0 0 1024 600 0 0 0 0 0 600 0 0 0 0 0 0]}}}}
  {:resource "node",
   :attributes {:name "Main", :type "Node"},
   :values {:script {:name "ExtResource", :arguments [1]},
