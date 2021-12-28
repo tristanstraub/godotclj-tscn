@@ -1,0 +1,14 @@
+config_version=4
+_global_script_classes=[]
+_global_script_class_icons={}
+
+[application]
+
+config/name="gdnativetest"
+run/main_scene="res://src/godot/main.tscn"
+config/icon="res://assets/icon.png"
+
+[rendering]
+
+environment/default_environment="res://src/godot/default_env.tres"
+
