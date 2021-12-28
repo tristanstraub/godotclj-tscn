@@ -42,36 +42,7 @@ Usage:
    {:resource {:name "sub_resource",
                :attributes {"type" "Curve2D", "id" 1}},
     :children {"_data" #godotclj.tscn2.TDictionary{"points" #godotclj.tscn2.TObject{:name "PoolVector2Array",
-                                                                                    :arguments [0
-                                                                                                0
-                                                                                                0
-                                                                                                0
-                                                                                                0
-                                                                                                0
-                                                                                                0
-                                                                                                0
-                                                                                                0
-                                                                                                0
-                                                                                                1024
-                                                                                                0
-                                                                                                0
-                                                                                                0
-                                                                                                0
-                                                                                                0
-                                                                                                1024
-                                                                                                600
-                                                                                                0
-                                                                                                0
-                                                                                                0
-                                                                                                0
-                                                                                                0
-                                                                                                600
-                                                                                                0
-                                                                                                0
-                                                                                                0
-                                                                                                0
-                                                                                                0
-                                                                                                0]}}}}
+                                                                                    :arguments [0 0 0 0 0 0 0 0 0 0 1024 0 0 0 0 0 1024 600 0 0 0 0 0 600 0 0 0 0 0 0]}}}}
    {:resource {:name "node", :attributes {"name" "Main", "type" "Node"}},
     :children {"script" #godotclj.tscn2.TObject{:name "ExtResource",
                                                 :arguments [1]},
