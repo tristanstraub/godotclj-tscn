@@ -33,7 +33,6 @@
 
 (defrecord TObject [])
 (defrecord TDictionary [])
-(defrecord TArray [values])
 
 (def transforms
   {:file         (fn [& parts] (vec parts))
@@ -59,8 +58,8 @@
                    ([kv] (map->TDictionary (into (ordered-map) kv))))
    :keyvalues    (fn [& kv] kv)
    :array        (fn
-                   ([] (->TArray []))
-                   ([values] (->TArray values)))
+                   ([] [])
+                   ([values] (vec values)))
    :dictionarykv (fn [k v]
                    [(name k) v])
 
@@ -105,7 +104,7 @@
   (cond (string? v)               (cl-format nil "\"~a\"" v)
         (instance? TObject v)     (emit-object options v)
         (instance? TDictionary v) (emit-dictionary options v)
-        (instance? TArray v)      (str "[" (emit-arguments options (:values v)) "]")
+        (vector? v)               (str "[" (emit-arguments options v) "]")
 
         :else                     v))
 
