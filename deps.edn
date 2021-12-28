@@ -1,3 +1,4 @@
-{:paths #{"src/clojure"}
- :deps {instaparse/instaparse {:mvn/version "1.4.10"}
-        camel-snake-kebab/camel-snake-kebab {:mvn/version "0.4.2"}}}
+{:paths #{"src/clojure" "tests" "test-resources"}
+ :deps {instaparse/instaparse               {:mvn/version "1.4.10"}
+        camel-snake-kebab/camel-snake-kebab {:mvn/version "0.4.2"}
+        org.flatland/ordered                {:mvn/version "1.15.10"}}}
