@@ -3,131 +3,156 @@ Godot *TSCN* and *godot* parser
 Usage:
 
 #+BEGIN_SRC clojure :results silent
-(require '[godotclj.tscn :refer [parse]])
+  (require '[godotclj.tscn2 :refer [parse]])
 #+END_SRC
 
 * Scene file parsing
 
 #+BEGIN_SRC clojure :results output
-(prn (parse (slurp "test-resources/main.tscn")))
+  (parse (slurp "test-resources/thecreeps/main.tscn"))
 #+END_SRC
 
-#+BEGIN_SRC edn
-[{:resource "gd_scene", :attributes {:load-steps 8, :format 2}}
- {:resource "ext_resource",
-  :attributes {:path "res://src/godot/main.gdns",
-               :type "Script",
-               :id 1}}
- {:resource "ext_resource",
-  :attributes {:path "res://src/godot/Player.tscn",
-               :type "PackedScene",
-               :id 2}}
- {:resource "ext_resource",
-  :attributes {:path "res://src/godot/Mob.tscn",
-               :type "PackedScene",
-               :id 3}}
- {:resource "ext_resource",
-  :attributes {:path "res://src/godot/HUD.tscn",
-               :type "PackedScene",
-               :id 4}}
- {:resource "ext_resource",
-  :attributes {:path "res://assets/dodge_assets/art/House In a Forest Loop.ogg",
-               :type "AudioStream",
-               :id 5}}
- {:resource "ext_resource",
-  :attributes {:path "res://assets/dodge_assets/art/gameover.wav",
-               :type "AudioStream",
-               :id 6}}
- {:resource "sub_resource",
-  :attributes {:type "Curve2D", :id 1},
-  :values {"_data" {:points {:name "PoolVector2Array",
-                             :arguments [0 0 0 0 0 0 0 0 0 0 1024 0 0 0 0 0 1024 600 0 0 0 0 0 600 0 0 0 0 0 0]}}}}
- {:resource "node",
-  :attributes {:name "Main", :type "Node"},
-  :values {:script {:name "ExtResource", :arguments [1]},
-           :mob {:name "ExtResource", :arguments [3]}}}
- {:resource "node",
-  :attributes {:name "ColorRect", :type "ColorRect", :parent "."},
-  :values {:anchor-right 1.0,
-           :anchor-bottom 1.0,
-           :color {:name "Color",
-                   :arguments [0.356863 0.0784314 0.486275 1]},
-           "__meta__" {"_edit_use_anchors_" false}}}
- {:resource "node",
-  :attributes {:name "Player",
-               :parent ".",
-               :instance {:name "ExtResource", :arguments [2]}}}
- {:resource "node",
-  :attributes {:name "MobTimer", :type "Timer", :parent "."},
-  :values {:wait-time 0.5}}
- {:resource "node",
-  :attributes {:name "ScoreTimer", :type "Timer", :parent "."}}
- {:resource "node",
-  :attributes {:name "StartTimer", :type "Timer", :parent "."},
-  :values {:wait-time 2.0, :one-shot true}}
- {:resource "node",
-  :attributes {:name "StartPosition", :type "Position2D", :parent "."},
-  :values {:position {:name "Vector2", :arguments [240 450]}}}
- {:resource "node",
-  :attributes {:name "MobPath", :type "Path2D", :parent "."},
-  :values {:curve {:name "SubResource", :arguments [1]}}}
- {:resource "node",
-  :attributes {:name "MobSpawnLocation",
-               :type "PathFollow2D",
-               :parent "MobPath"}}
- {:resource "node",
-  :attributes {:name "HUD",
-               :parent ".",
-               :instance {:name "ExtResource", :arguments [4]}}}
- {:resource "node",
-  :attributes {:name "Music", :type "AudioStreamPlayer", :parent "."},
-  :values {:stream {:name "ExtResource", :arguments [5]}}}
- {:resource "node",
-  :attributes {:name "DeathSound",
-               :type "AudioStreamPlayer",
-               :parent "."},
-  :values {:stream {:name "ExtResource", :arguments [6]}}}
- {:resource "connection",
-  :attributes {:signal "hit",
-               :from "Player",
-               :to ".",
-               :method "game_over"}}
- {:resource "connection",
-  :attributes {:signal "timeout",
-               :from "MobTimer",
-               :to ".",
-               :method "_on_MobTimer_timeout"}}
- {:resource "connection",
-  :attributes {:signal "timeout",
-               :from "ScoreTimer",
-               :to ".",
-               :method "_on_ScoreTimer_timeout"}}
- {:resource "connection",
-  :attributes {:signal "timeout",
-               :from "StartTimer",
-               :to ".",
-               :method "_on_StartTimer_timeout"}}
- {:resource "connection",
-  :attributes {:signal "start_game",
-               :from "HUD",
-               :to ".",
-               :method "new_game"}}]
+#+BEGIN_SRC clojure
+  [{:resource {:name "gd_scene",
+               :attributes {"load_steps" 8, "format" 2}}}
+   {:resource {:name "ext_resource",
+               :attributes {"path" "res://src/godot/main.gdns",
+                            "type" "Script",
+                            "id" 1}}}
+   {:resource {:name "ext_resource",
+               :attributes {"path" "res://src/godot/Player.tscn",
+                            "type" "PackedScene",
+                            "id" 2}}}
+   {:resource {:name "ext_resource",
+               :attributes {"path" "res://src/godot/Mob.tscn",
+                            "type" "PackedScene",
+                            "id" 3}}}
+   {:resource {:name "ext_resource",
+               :attributes {"path" "res://src/godot/HUD.tscn",
+                            "type" "PackedScene",
+                            "id" 4}}}
+   {:resource {:name "ext_resource",
+               :attributes {"path" "res://assets/dodge_assets/art/House In a Forest Loop.ogg",
+                            "type" "AudioStream",
+                            "id" 5}}}
+   {:resource {:name "ext_resource",
+               :attributes {"path" "res://assets/dodge_assets/art/gameover.wav",
+                            "type" "AudioStream",
+                            "id" 6}}}
+   {:resource {:name "sub_resource",
+               :attributes {"type" "Curve2D", "id" 1}},
+    :children {"_data" #godotclj.tscn2.TDictionary{"points" #godotclj.tscn2.TObject{:name "PoolVector2Array",
+                                                                                    :arguments [0 0 0 0 0 0 0 0 0 0 1024 0 0 0 0 0 1024 600 0 0 0 0 0 600 0 0 0 0 0 0]}}}}
+   {:resource {:name "node", :attributes {"name" "Main", "type" "Node"}},
+    :children {"script" #godotclj.tscn2.TObject{:name "ExtResource",
+                                                :arguments [1]},
+               "Mob" #godotclj.tscn2.TObject{:name "ExtResource",
+                                             :arguments [3]}}}
+   {:resource {:name "node",
+               :attributes {"name" "ColorRect",
+                            "type" "ColorRect",
+                            "parent" "."}},
+    :children {"anchor_right" 1.0,
+               "anchor_bottom" 1.0,
+               "color" #godotclj.tscn2.TObject{:name "Color",
+                                               :arguments [0.356863
+                                                           0.0784314
+                                                           0.486275
+                                                           1]},
+               "__meta__" #godotclj.tscn2.TDictionary{"_edit_use_anchors_" false}}}
+   {:resource {:name "node",
+               :attributes {"name" "Player",
+                            "parent" ".",
+                            "instance" #godotclj.tscn2.TObject{:name "ExtResource",
+                                                               :arguments [2]}}}}
+   {:resource {:name "node",
+               :attributes {"name" "MobTimer",
+                            "type" "Timer",
+                            "parent" "."}},
+    :children {"wait_time" 0.5}}
+   {:resource {:name "node",
+               :attributes {"name" "ScoreTimer",
+                            "type" "Timer",
+                            "parent" "."}}}
+   {:resource {:name "node",
+               :attributes {"name" "StartTimer",
+                            "type" "Timer",
+                            "parent" "."}},
+    :children {"wait_time" 2.0, "one_shot" true}}
+   {:resource {:name "node",
+               :attributes {"name" "StartPosition",
+                            "type" "Position2D",
+                            "parent" "."}},
+    :children {"position" #godotclj.tscn2.TObject{:name "Vector2",
+                                                  :arguments [240 450]}}}
+   {:resource {:name "node",
+               :attributes {"name" "MobPath",
+                            "type" "Path2D",
+                            "parent" "."}},
+    :children {"curve" #godotclj.tscn2.TObject{:name "SubResource",
+                                               :arguments [1]}}}
+   {:resource {:name "node",
+               :attributes {"name" "MobSpawnLocation",
+                            "type" "PathFollow2D",
+                            "parent" "MobPath"}}}
+   {:resource {:name "node",
+               :attributes {"name" "HUD",
+                            "parent" ".",
+                            "instance" #godotclj.tscn2.TObject{:name "ExtResource",
+                                                               :arguments [4]}}}}
+   {:resource {:name "node",
+               :attributes {"name" "Music",
+                            "type" "AudioStreamPlayer",
+                            "parent" "."}},
+    :children {"stream" #godotclj.tscn2.TObject{:name "ExtResource",
+                                                :arguments [5]}}}
+   {:resource {:name "node",
+               :attributes {"name" "DeathSound",
+                            "type" "AudioStreamPlayer",
+                            "parent" "."}},
+    :children {"stream" #godotclj.tscn2.TObject{:name "ExtResource",
+                                                :arguments [6]}}}
+   {:resource {:name "connection",
+               :attributes {"signal" "hit",
+                            "from" "Player",
+                            "to" ".",
+                            "method" "game_over"}}}
+   {:resource {:name "connection",
+               :attributes {"signal" "timeout",
+                            "from" "MobTimer",
+                            "to" ".",
+                            "method" "_on_MobTimer_timeout"}}}
+   {:resource {:name "connection",
+               :attributes {"signal" "timeout",
+                            "from" "ScoreTimer",
+                            "to" ".",
+                            "method" "_on_ScoreTimer_timeout"}}}
+   {:resource {:name "connection",
+               :attributes {"signal" "timeout",
+                            "from" "StartTimer",
+                            "to" ".",
+                            "method" "_on_StartTimer_timeout"}}}
+   {:resource {:name "connection",
+               :attributes {"signal" "start_game",
+                            "from" "HUD",
+                            "to" ".",
+                            "method" "new_game"}}}]
 #+END_SRC
 
 * Project file parsing
 
 #+BEGIN_SRC clojure :results output
-(prn (parse (slurp "test-resources/project.godot")))
+  (parse (slurp "test-resources/thecreeps/project.godot"))
 #+END_SRC
 
-#+BEGIN_SRC edn
-[{:config-version 4,
-  "_global_script_classes" [],
-  "_global_script_class_icons" {}}
- {:resource "application",
-  :values {:config/name "gdnativetest",
-           :run/main-scene "res://src/godot/main.tscn",
-           :config/icon "res://assets/icon.png"}}
- {:resource "rendering",
-  :values {:environment/default-environment "res://src/godot/default_env.tres"}}]
+#+BEGIN_SRC clojure
+  [{:children {"config_version" 4,
+               "_global_script_classes" #godotclj.tscn2.TArray{:values []},
+               "_global_script_class_icons" #godotclj.tscn2.TDictionary{}}}
+   {:resource {:name "application"},
+    :children {"config/name" "gdnativetest",
+               "run/main_scene" "res://src/godot/main.tscn",
+               "config/icon" "res://assets/icon.png"}}
+   {:resource {:name "rendering"},
+    :children {"environment/default_environment" "res://src/godot/default_env.tres"}}]
 #+END_SRC
